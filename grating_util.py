@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 from matplotlib.pyplot import imshow, figure
 
-def makeGaussian(size, radius=100, sharpness=5, center=None, annular=0):
+def makeGaussian(size, radius=100, sharpness=5, center=None, annular=0, shift=0):
     """ 
     Make a square gaussian kernel.
     size is the length of a side of the square.
@@ -29,8 +29,8 @@ def makeGaussian(size, radius=100, sharpness=5, center=None, annular=0):
     if center is None:
         x0 = y0 = size // 2
     else:
-        x0 = center[0]
-        y0 = center[1]
+        x0 = center[0]+shift
+        y0 = center[1]+shift
     
     if sharpness != 0:
         outer_gaussian = np.exp(-4*np.log(2) * (np.clip((x-x0)**2 + (y-y0)**2 - radius**2,0,None)) / sharpness**2)
