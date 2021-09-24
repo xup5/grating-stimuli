@@ -45,7 +45,7 @@ def makeGaussian(size, radius=100, sharpness=5, center=None, annular=0, shift=0)
         return inner_gaussian * outer_gaussian
     return outer_gaussian
 
-def makeGrating(size, spatialf, ori=0, phase=0, imsize=224, sharpness=5, contrast=1, annular=0, dtype='uint8'):
+def makeGrating(size, spatialf, ori=0, phase=0, imsize=224, sharpness=5, contrast=1, annular=0, dtype='uint8', shift=0):
     """
     Make a square grating.
     size: the full-width-half-maximum of gaussian mask
@@ -65,7 +65,7 @@ def makeGrating(size, spatialf, ori=0, phase=0, imsize=224, sharpness=5, contras
     for x in range(imsize):
         for y in range(imsize):
             im[x,y] = np.sin(2*np.pi/spatialf*((x*np.cos(ori)+y*np.sin(ori))+phi))           
-    gaussianmask = makeGaussian(imsize, size, sharpness, annular=annular)
+    gaussianmask = makeGaussian(imsize, size, sharpness, annular=annular, shift=shift)
     im = im*gaussianmask*contrast
     im = (im+1) / 2 * 255
     im = np.repeat(im[:,:,np.newaxis],3,axis=2)
