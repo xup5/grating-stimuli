@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 from matplotlib.pyplot import imshow, figure
 
-def makeGaussian(size, radius=100, sharpness=5, center=None, annular=0, shift=0):
+def makeGaussian(size, radius=100, sharpness=3, center=None, annular=0, shift=0):
     """ 
     Make a square gaussian kernel.
     size is the length of a side of the square.
@@ -15,7 +15,10 @@ def makeGaussian(size, radius=100, sharpness=5, center=None, annular=0, shift=0)
     stimuli, i.e. donuts.
     """
     
-    assert radius > (sharpness/2)
+    # assert radius > (sharpness/2)
+    if radius < (sharpness/2):
+        return np.zeros((size,size))
+        
     assert annular < radius
     
     radius = radius - sharpness/2
@@ -45,7 +48,7 @@ def makeGaussian(size, radius=100, sharpness=5, center=None, annular=0, shift=0)
         return inner_gaussian * outer_gaussian
     return outer_gaussian
 
-def makeGrating(size, spatialf, ori=0, phase=0, imsize=224, sharpness=5, contrast=1, annular=0, dtype='uint8', shift=0):
+def makeGrating(size, spatialf, ori=0, phase=0, imsize=224, sharpness=3, contrast=1, annular=0, dtype='uint8', shift=0):
     """
     Make a square grating.
     size: the full-width-half-maximum of gaussian mask
