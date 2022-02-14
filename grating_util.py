@@ -2,7 +2,6 @@
 Author: Xu Pan. 2021
 """
 import numpy as np
-from PIL import Image
 from matplotlib.pyplot import imshow, figure
 
 def makeGaussian(size, radius=100, sharpness=3, center=None, annular=0, shift=0):
@@ -30,7 +29,7 @@ def makeGaussian(size, radius=100, sharpness=3, center=None, annular=0, shift=0)
     y = x[:,np.newaxis]
     
     if center is None:
-        x0 = y0 = size // 2
+        x0 = y0 = size // 2 + shift
     else:
         x0 = center[0]+shift
         y0 = center[1]+shift
@@ -48,7 +47,7 @@ def makeGaussian(size, radius=100, sharpness=3, center=None, annular=0, shift=0)
         return inner_gaussian * outer_gaussian
     return outer_gaussian
 
-def makeGrating(size, spatialf, ori=0, phase=0, imsize=224, sharpness=3, contrast=1, annular=0, dtype='uint8', shift=0):
+def makeGrating(size, spatialf, ori=0, phase=0, imsize=224, sharpness=3, contrast=1, annular=0, dtype='uint8', shift=0, center=None):
     """
     Make a square grating.
     size: the full-width-half-maximum of gaussian mask
@@ -68,7 +67,7 @@ def makeGrating(size, spatialf, ori=0, phase=0, imsize=224, sharpness=3, contras
     for x in range(imsize):
         for y in range(imsize):
             im[x,y] = np.sin(2*np.pi/spatialf*((x*np.cos(ori)+y*np.sin(ori))+phi))           
-    gaussianmask = makeGaussian(imsize, size, sharpness, annular=annular, shift=shift)
+    gaussianmask = makeGaussian(imsize, size, sharpness, annular=annular, shift=shift, center=center)
     im = im*gaussianmask*contrast
     im = (im+1) / 2 * 255
     im = np.repeat(im[:,:,np.newaxis],3,axis=2)
